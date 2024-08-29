@@ -1,6 +1,7 @@
 import logging
 import random
 import sqlite3
+from flask import Flask, request
 from discord.ext import commands
 from datetime import datetime, timedelta
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove
@@ -14,7 +15,8 @@ logger = logging.getLogger(__name__)
 # Bot token
 TELEGRAM_BOT_TOKEN = '6817603176:AAHcvgFyPvaGNrF-8lO_8889kAhNZrXbW84'
 DATABASE_NAME = 'reading_challenge.db'
-
+TOKEN = os.environ.get(6817603176:AAHcvgFyPvaGNrF-8lO_8889kAhNZrXbW84')
+bot = Application.builder().token(TOKEN).build()
 # Conversation states
 (CHOOSING, FEEDBACK_TEXT, BOOK_RECOMMENDATION, READING_PROGRESS, 
  QUIZ, BOOK_REVIEW, READING_GROUP, CHALLENGE, CREATING_GROUP, 
@@ -25,7 +27,24 @@ conn = sqlite3.connect('reading_challenge.db')
 c = conn.cursor()
 
 # Create tables
+app = Flask(__name__)
 
+@app.route('/' + TOKEN, methods=['POST'])
+def webhook():
+    update = Update.de_json(request.get_json(), bot.bot)
+    bot.process_update(update)
+    return "OK"
+
+@app.route('/')
+def index():
+    return "Hello, this is your Telegram bot!"
+
+if __name__ == '__main__':
+    # تعيين Webhook
+    bot.bot.set_webhook(url='https://your-app-url.koyeb.app/' + TOKEN)
+    
+    # تشغيل تطبيق Flask
+    port = int(os.environ.get('PORT', 5000
 def init_db():
     c.executescript('''
     CREATE TABLE IF NOT EXISTS users
