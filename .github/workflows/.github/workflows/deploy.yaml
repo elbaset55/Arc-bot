@@ -1,0 +1,30 @@
+name: Build and deploy the application to Koyeb
+
+on:
+  schedule:
+    - cron: '40 9 * * *'
+  push:
+    branches:
+      - '*'
+
+jobs:
+  deploy:
+    concurrency:
+      group: "${{ github.ref_name }}"
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install and configure the Koyeb CLI
+        uses: koyeb-community/koyeb-actions@v2
+        with:
+          api_token: "${{ secrets.KOYEB_EXAMPLES_APPS_TOKEN }}"
+
+      - name: Build and deploy the application
+        uses: koyeb/action-git-deploy@v1
+        with:
+          app-name: aim-${{ github.ref_name }}
+          service-ports: "8000:http"
+          service-routes: "/:8000"
+          git-builder: buildpack
+          git-run-command: "aim up --host 0.0.0.0 --port 8000"
+          skip-cache: true
