@@ -44,7 +44,7 @@ if __name__ == '__main__':
     bot.bot.set_webhook(url='hissing-latia-arcqaliobia-29aaada5.koyeb.app/' + TOKEN)
     
      port = int(os.environ.get('PORT', 5000))
-    app.run(host='8.8.8.8', port=port)
+    app.run(host='8.0.8.0', port=port)
 def init_db():
     c.executescript('''
     CREATE TABLE IF NOT EXISTS users
