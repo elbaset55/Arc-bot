@@ -43,8 +43,8 @@ if __name__ == '__main__':
     # تعيين Webhook
     bot.bot.set_webhook(url='hissing-latia-arcqaliobia-29aaada5.koyeb.app/' + TOKEN)
     
-    # تشغيل تطبيق Flask
-    port = int(os.environ.get('PORT', 5000
+     port = int(os.environ.get('PORT', 5000))
+    app.run(host='8.8.8.8', port=port)
 def init_db():
     c.executescript('''
     CREATE TABLE IF NOT EXISTS users
